@@ -32,6 +32,7 @@ Apache Knox Configuration
 
 In order for the Login Link above to work, we need to have a configured KnoxSSO topology in the Knox Gateway instance that we are point to. Below is an example that leverages an Okta application for SSO:
 
+```
 <topology>
     <gateway>
       <provider>
@@ -102,6 +103,7 @@ In order for the Login Link above to work, we need to have a configured KnoxSSO 
        </param>
     </service>
 </topology>
+```
 
 This particular KnoxSSO deployment is using the pac4j provider to authenticate via Okta as a SAML IdP. The same type of SAML integration can be done with other providers such as Shibboleth, Keystone, etc. See the pac4j provider documentation for details of other supported providers: http://knox.apache.org/books/knox-0-8-0/user-guide.html#Pac4j+Provider+-+CAS+/+OAuth+/+SAML+/+OpenID+Connect - some examples are OpenId Connect, CAS Server, Twitter, Facebook, etc.
 
@@ -122,6 +124,7 @@ The topology that defines the endpoint used to actually access Hadoop resources 
 
 In order to leverage the single sign on capabilities described earlier, this topology much configure the SSOCookie federation provider. This essentially means that the SSO cookie is required in order to access any of the Hadoop endpoints configured within this topology.
 
+```
 <topology>
     <gateway>
       <provider>
@@ -181,6 +184,7 @@ In order to leverage the single sign on capabilities described earlier, this top
         <url>http://localhost:8088/ws</url>
     </service>
 </topology>
+```
 
 Again, you can see that CORS must be enabled for the browser to allow REST API calls from javascript to an endpoint other than the one used to serve this application. Therefore, the WebAppSec provider is configured and setup to enable CORS.
 
