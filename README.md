@@ -4,6 +4,8 @@ Browse HDFS through Apache Knox.
 
 A simple demo application that leverages KnoxSSO service and SSOCookie provider to authenticate once and use the SSO cookie for subsequent requests.
 
+![alt text](knoxplorer.png "KnoXplorer")
+
 Requires python for the SimpleHTTPServer (or you can use another web server).
 
 1. Clone or checkout this project.
