@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Apache Knox HDFS Browser</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+
+    <script type="text/javascript" src="knox.js"></script>
+    <script>document.addEventListener("load", listStatus());</script>
+  </head>
+
+  <body>
+    <h1>KnoXplorer</h1>
+    <h2 id="path" style="color:gray">---</h2>
+    <div id="listing"></div>
+    <div id="login" style="display: block">
+      <p style="display: block">Please login to Knox:</p>
+      <a style="display: block" id="login" href="https://localhost:8443/gateway/knoxsso/api/v1/websso?originalUrl=http://localhost:8000?topology=localhost:8443/gateway/sandbox&path=/">Login</a>
+    </div>
+  </body>
+</html>
