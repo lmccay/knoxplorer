@@ -38,15 +38,6 @@ In order for the Login Link above to work, we need to have a configured KnoxSSO 
 <topology>
     <gateway>
       <provider>
-          <role>webappsec</role>
-          <name>WebAppSec</name>
-          <enabled>true</enabled>
-          <param>
-            <name>cors.enabled</name>
-            <value>true</value>
-          </param>
-      </provider>
-      <provider>
           <role>federation</role>
           <name>pac4j</name>
           <enabled>true</enabled>
@@ -64,7 +55,7 @@ In order for the Login Link above to work, we need to have a configured KnoxSSO 
           </param>
           <param>
             <name>saml.keystorePath</name>
-            <value>/Users/larry/Projects/incubator-knox/install/knox-0.8.0-SNAPSHOT/data/security/keystores/gateway.jks</value>
+            <value>{GATEWAY_HOME}/knox-0.8.0-SNAPSHOT/data/security/keystores/gateway.jks</value>
           </param>
           <param>
             <name>saml.identityProviderMetadataPath</name>
@@ -76,7 +67,7 @@ In order for the Login Link above to work, we need to have a configured KnoxSSO 
           </param>
           <param>
             <name>saml.serviceProviderEntityId</name>
-            <value>https://www.local.com:8443/gateway/knoxsso/api/v1/websso?client_name=SAML2Client</value>
+            <value>https://www.local.com:8443/gateway/knoxsso/api/v1/websso?pac4jCallback=true&amp;client_name=SAML2Client</value>
           </param>
       </provider>
       <provider>
@@ -85,7 +76,7 @@ In order for the Login Link above to work, we need to have a configured KnoxSSO 
           <enabled>true</enabled>
           <param>
             <name>principal.mapping</name>
-            <value>larry.mccay@gmail.com=guest;</value>
+            <value>guest@example.com=guest;</value>
           </param>
       </provider>
     </gateway>
@@ -112,8 +103,6 @@ This particular KnoxSSO deployment is using the pac4j provider to authenticate v
 You will also notice the KNOXSSO service declaration. Given a successful login by the pac4j provider, the KNOXSSO service will create an SSO cookie that can be used as the proof of authentication to the originalUrl until the cookie or the token within the cookie expires. Docs can be found http://knox.apache.org/books/knox-0-8-0/user-guide.html#KnoxSSO+Setup+and+Configuration - for the KnoxSSO service.
 
 What may be less clear is that this simple application doesn't actually care about the user identity but the REST API calls to WebHDFS within the knox.js file of this application must provide the SSO cookie on each call. The cookie is verified by the Apache Knox Gateway for each call to ensure that it is trusted, not expired and extracts the identity information for interaction with the Hadoop WebHDFS service.
-
-In order for the Cookie to be presented by the browser to the gateway via REST we need to enable Cross Origin Resource Sharing through the WebAppSec provider at the top.
 
 Please also note the knoxsso.redirect.whitelist.regex parameter in the KNOXSSO service. This semicolon separated list of regex expressions (there is only one in this case) will be used to validate the originalUrl query parameter to ensure that KnoxSSO will only redirect browsers to trusted sites. This is to avoid things like phishing attacks.
 
@@ -188,7 +177,7 @@ In order to leverage the single sign on capabilities described earlier, this top
 </topology>
 ```
 
-Again, you can see that CORS must be enabled for the browser to allow REST API calls from javascript to an endpoint other than the one used to serve this application. Therefore, the WebAppSec provider is configured and setup to enable CORS.
+You can see that CORS must be enabled for the browser to allow REST API calls from javascript to an endpoint other than the one used to serve this application and to present the cookie as a credential. Therefore, the WebAppSec provider is configured and setup to enable CORS.
 
 Also note that there is no need to do principal mapping in this topology. That is because we did that in the KnoxSSO topology which results in the identity within the token to be the mapped or effective principal. We could also move that principal mapping to each topology that may want map the same IdP identity to different users. This is left up to the admin.
 
@@ -198,6 +187,8 @@ Troubleshooting
 The most likely trouble that you will run into will be related to cookies and domains. Make sure that the domains that you are using for each configured URL are the same and are acceptable to your IdP and browser.
 
 Another issue that might crop up would be the secureOnly flag on the cookie - if you are not running Apache Knox with SSL enabled (shame on you) then this flag must not be set. See the KnoxSSO topology and service for setting that to false.
+
+If authentication seems to be successful but there is no listing rendered. Ensure that there is a principal mapping for the username being asserted to the WebHDFS service. Check the audit log for the username being used and map it to "guest" as necessary.
 
 ENJOY!
 ====
