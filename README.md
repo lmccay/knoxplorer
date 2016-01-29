@@ -10,13 +10,13 @@ Requires python for the SimpleHTTPServer (or you can use another web server).
 
 1. Clone or checkout this project.
 2. Execute start.py or deploy the html and js files to your webserver
-3. Navigate to http://localhost:8000/?topology=localhost:8443/gateway/sandbox/
+3. Navigate to http://www.local.com:8000/?topology=www.local.com:8443/gateway/sandbox/
 
 Login Details and Link
 ========
 The login link in index.html is pointing to the KnoxSSO topology and indicating that the target URL (originalURL) is this application itself. This is an effective way to leverage the SP initiated authentication through a login link.
 
-https://localhost:8443/gateway/knoxsso/api/v1/websso?originalUrl=http://localhost:8000?topology=localhost:8443/gateway/sandbox&path=/
+https://www.local.com:8443/gateway/knoxsso/api/v1/websso?originalUrl=http://www.local.com:8000?topology=www.local.com:8443/gateway/sandbox&path=/
 
 It also provides a query parameter for the knoxplorer application that indicates the topology to use as the endpoint for Hadoop cluster access and is currently hardcoded to "sandbox".
 
@@ -26,6 +26,8 @@ Note that the hostnames may need to be changed depending on the browser you are 
 2. Okta does not like 127.0.0.1 for the callback URL
 
 For situations like this I have added a phoney domain to /etc/hosts to represent my local machine: "www.local.com" this has worked for me.
+
+*NOTE:* ALL of the URLs in this application and topology examples reference www.local.com as the localhost machine.
 
 Apache Knox Configuration
 ========
